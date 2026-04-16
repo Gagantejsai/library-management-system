@@ -1,0 +1,61 @@
+package com.example.library;
+
+public class User {
+    private String userId;
+    private String userName;
+    private int booksIssued;
+    private int borrowingDays;
+    private static final int ALLOWED_DAYS = 14;
+    private static final double FINE_PER_DAY = 5.0;
+
+    public User(String userId, String userName, int booksIssued, int borrowingDays) {
+        this.userId = userId;
+        this.userName = userName;
+        this.booksIssued = booksIssued;
+        this.borrowingDays = borrowingDays;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public int getBooksIssued() {
+        return booksIssued;
+    }
+
+    public int getBorrowingDays() {
+        return borrowingDays;
+    }
+
+    public double calculateLateFine() {
+        if (borrowingDays > ALLOWED_DAYS) {
+            int extraDays = borrowingDays - ALLOWED_DAYS;
+            return extraDays * FINE_PER_DAY;
+        }
+        return 0.0;
+    }
+
+    public String getBorrowingStatus() {
+        if (borrowingDays <= ALLOWED_DAYS) {
+            return "ON TIME";
+        } else {
+            int extraDays = borrowingDays - ALLOWED_DAYS;
+            return "LATE by " + extraDays + " day(s)";
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "User Details:\n" +
+                "  User ID: " + userId + "\n" +
+                "  User Name: " + userName + "\n" +
+                "  Books Issued: " + booksIssued + "\n" +
+                "  Borrowing Days: " + borrowingDays + "\n" +
+                "  Borrowing Status: " + getBorrowingStatus() + "\n" +
+                "  Late Fine: ₹" + String.format("%.2f", calculateLateFine());
+    }
+}

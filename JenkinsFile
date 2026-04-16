@@ -1,0 +1,46 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                echo '===== CHECKOUT STAGE ====='
+                checkout scm
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo '===== BUILD STAGE ====='
+                sh 'mvn clean compile'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo '===== TEST STAGE ====='
+                sh 'mvn test'
+            }
+        }
+
+        stage('Package') {
+            steps {
+                echo '===== PACKAGE STAGE ====='
+                sh 'mvn package'
+            }
+        }
+    }
+
+    post {
+        always {
+            echo '===== PIPELINE COMPLETED ====='
+            junit 'target/surefire-reports/*.xml'
+        }
+        success {
+            echo '✓ Pipeline executed successfully!'
+        }
+        failure {
+            echo '✗ Pipeline failed!'
+        }
+    }
+}
